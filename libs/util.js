@@ -210,5 +210,21 @@ class Util {
       throw new Error("创建人脸图片存储路径失败：" + error.message);
     }
   }
+
+  static doTask(func, redisLockKey, log) {
+    return async function() {
+      let redisKey = redisLockKey;
+      log.biz.info(`${redisKey}开始定时任务`);
+      let res = await redis.setnx(redisKey, 1);
+      if (res !== 1) {
+        log.biz.info(`${redisKey}定时任务是锁定状态`);
+        return false;
+      }
+      await redis.expire(redisKey, 300);
+      await func();
+      await redis.del(redisKey);
+      log.biz.info(`${redisKey}定时任务处理完毕`);
+    };
+  }
 }
 module.exports = Util;

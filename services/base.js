@@ -3,8 +3,8 @@ const db = require("../models");
 const baseLog = require("../log");
 class Base {
   constructor(ctx) {
-    this.log = ctx.log;
-    this.ctx = ctx;
+    this.ctx = ctx || { log: baseLog };
+    this.log = this.ctx.log;
     this.util = Util;
     this.db = db;
 

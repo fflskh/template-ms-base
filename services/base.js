@@ -8,7 +8,7 @@ class Base {
     this.util = Util;
     this.db = db;
 
-    const requestId = ctx.requestId || (ctx.header && ctx.header["x-request-id"]) || "";
+    const requestId = this.ctx.requestId || (this.ctx.header && this.ctx.header["x-request-id"]) || "";
     const dbLogger = baseLog.getReqIdLogger(requestId, "db");
     this.dbLogging = Util.buildDbLogging(dbLogger.db);
   }
